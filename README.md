@@ -212,6 +212,53 @@ Note on backend cloud deployment:
 - Railway deployment was attempted but blocked by expired trial/billing plan.
 - Frontend includes proxy fallback handlers for demo continuity when backend cloud is unavailable.
 
+## Deploy Backend on Render
+
+This repository includes a ready Render blueprint file:
+
+- `render.yaml` (root)
+
+### Option A - Blueprint Deploy (recommended)
+
+1. Open Render dashboard and choose "New +" -> "Blueprint".
+2. Connect GitHub repository: `AnuragAgrahari04/Grid07`.
+3. Render auto-detects `render.yaml` and creates service `grid07-backend`.
+4. In Render environment variables, set:
+	- `GROQ_API_KEY` = your key
+5. Deploy and wait for health check:
+	- `GET /api/health`
+
+### Option B - Manual Web Service Deploy
+
+Create a new Web Service in Render with these values:
+
+- Root Directory: `backend`
+- Runtime: `Python`
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Health Check Path: `/api/health`
+
+Environment variables:
+
+- `GROQ_API_KEY` = your key
+- `LLM_PROVIDER` = `auto`
+- `EMBEDDING_MODEL` = `all-MiniLM-L6-v2`
+- `LLM_MODEL` = `llama-3.1-8b-instant`
+- `CHROMA_COLLECTION_NAME` = `grid07_personas`
+- `SIMILARITY_THRESHOLD` = `0.45`
+- `BACKEND_HOST` = `0.0.0.0`
+- `BACKEND_PORT` = `10000`
+
+### Wire Render backend to Vercel frontend
+
+After Render gives you backend URL (example: `https://grid07-backend.onrender.com`):
+
+1. In Vercel Project Settings -> Environment Variables:
+	- `BACKEND_URL` = your Render backend URL
+2. Redeploy frontend production.
+3. Test:
+	- `https://<your-frontend-domain>/api/proxy?path=%2Fapi%2Fhealth`
+
 ## Deliverables Checklist
 
 - Python code for all phases: complete
