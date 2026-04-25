@@ -1,0 +1,26 @@
+# Core
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-dotenv==1.0.1
+pydantic==2.7.0
+pydantic-settings==2.3.0
+
+# LLM
+langchain==0.2.0
+langgraph==0.2.0
+langchain-groq==0.1.10
+langchain-core==0.2.43
+
+# Vector DB
+chromadb==1.5.8
+
+# Embeddings (runs locally)
+sentence-transformers==3.0.0
+torch==2.3.0
+
+# Logging
+rich==13.7.0
+
+# Testing
+pytest==8.2.0
+httpx==0.27.0
